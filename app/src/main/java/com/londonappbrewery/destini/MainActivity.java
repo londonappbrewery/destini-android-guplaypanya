@@ -12,43 +12,42 @@ public class MainActivity extends AppCompatActivity {
     TextView mStoryTextView;
     Button mTopButton;
     Button mButtomButton ;
-    int mIndex;
-    StoryDetails[] mStoryProgress = new StoryDetails[]{
-            new StoryDetails(R.string.T1_Ans1,R.string.T1_Ans2,R.string.T1_Story),
-            new StoryDetails(R.string.T2_Ans1,R.string.T2_Ans2,R.string.T2_Story),
-            new StoryDetails(R.string.T3_Ans1,R.string.T3_Ans2,R.string.T3_Story),
-            new StoryDetails(R.string.T4_End),
-            new StoryDetails(R.string.T5_End),
-            new StoryDetails(R.string.T6_End),
-    };
+    int mStoryIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mStoryIndex = 1;
         // TODO: Step 5 - Wire up the 3 views from the layout to the member variables:
-        if(savedInstanceState!=null){
-            mIndex=savedInstanceState.getInt("IndexKey");
-        }else {
-            mIndex=0;
-        }
-
         mStoryTextView = (TextView) findViewById(R.id.storyTextView);
         mTopButton= (Button)findViewById(R.id.buttonTop);
         mButtomButton= (Button)findViewById(R.id.buttonBottom);
-        updateStory(mStoryProgress[mIndex]);
+
         // TODO: Steps 6, 7, & 9 - Set a listener on the top button:
         mTopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mIndex==0||mIndex==1) {
-                    mIndex=2;
-                    updateStory(mStoryProgress[mIndex]);
+                if (mStoryIndex == 1){
+                    mStoryTextView.setText(R.string.T3_Story);
+                    mTopButton.setText(R.string.T3_Ans1);
+                    mButtomButton.setText(R.string.T3_Ans2);
+                    mStoryIndex = 2;
+                }else if(mStoryIndex == 2){
+                    mStoryTextView.setText(R.string.T6_End);
+                    mTopButton.setVisibility(View.GONE);
+                    mButtomButton.setVisibility(View.GONE);
                 }
-                else if(mIndex==2){
-                    mIndex=5;
-                    updateStory(mStoryProgress[mIndex]);
+                else if (mStoryIndex == 3){
+                    mStoryTextView.setText(R.string.T3_Story);
+                    mTopButton.setText(R.string.T3_Ans1);
+                    mButtomButton.setText(R.string.T3_Ans2);
+                    mStoryIndex = 5;
+                }else if(mStoryIndex == 5){
+                    mStoryTextView.setText(R.string.T6_End);
+                    mTopButton.setVisibility(View.GONE);
+                    mButtomButton.setVisibility(View.GONE);
                 }
             }
         });
@@ -57,36 +56,28 @@ public class MainActivity extends AppCompatActivity {
         mButtomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mIndex==0){
-                    mIndex=1;
-                    updateStory(mStoryProgress[mIndex]);
+                if (mStoryIndex == 1){
+                    mStoryTextView.setText(R.string.T2_Story);
+                    mTopButton.setText(R.string.T2_Ans1);
+                    mButtomButton.setText(R.string.T2_Ans2);
+                    mStoryIndex = 3;
                 }
-                else if(mIndex==1){
-                    mIndex=3;
-                    updateStory(mStoryProgress[mIndex]);
+                else if (mStoryIndex == 3){
+                    mStoryTextView.setText(R.string.T4_End);
+                    mTopButton.setVisibility(View.GONE);
+                    mButtomButton.setVisibility(View.GONE);
+                }else if (mStoryIndex == 2){
+                    mStoryTextView.setText(R.string.T5_End);
+                    mTopButton.setVisibility(View.GONE);
+                    mButtomButton.setVisibility(View.GONE);
                 }
-                else if(mIndex==2){
-                    mIndex=4;
-                    updateStory(mStoryProgress[mIndex]);
+                else if (mStoryIndex == 5){
+                    mStoryTextView.setText(R.string.T5_End);
+                    mTopButton.setVisibility(View.GONE);
+                    mButtomButton.setVisibility(View.GONE);
                 }
             }
         });
 
-    }
-    public void updateStory(StoryDetails Story){
-        mStoryTextView.setText(Story.getStory());
-        if(Story.getBottomAnswer()==0||Story.getTopAnswer()==0){
-            mTopButton.setVisibility(View.GONE);
-            mButtomButton.setVisibility(View.GONE);
-            return;
-        }
-        mTopButton.setText(Story.getTopAnswer());
-        mButtomButton.setText(Story.getBottomAnswer());
-    }
-    @Override
-    public void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-
-        outState.putInt("IndexKey", mIndex);
     }
 }
